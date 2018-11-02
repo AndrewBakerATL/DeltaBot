@@ -137,7 +137,7 @@ async def on_member_join(member):
     role = discord.utils.get(member.server.roles, name='Admin')
     await bot.add_roles(member, role)
 
-
-#Token
 bot.loop.create_task(change_status())
+
+#Tokens
 bot.run(Token)
