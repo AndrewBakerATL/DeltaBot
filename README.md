@@ -1,4 +1,4 @@
-# Discord.py bot
+# Discord.py Bot
 A Simple Discord Bot running on the discord.py API.
 
 ## The Why
