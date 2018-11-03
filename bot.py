@@ -40,7 +40,7 @@ async def help(ctx):
     embed = discord.Embed(color = 0xffffff)
     embed.set_author(name='Requesting Help Report', icon_url="https://willjackward.files.wordpress.com/2013/02/screen-shot-2013-02-11-at-10-40-04.png")
     embed.add_field(name='Introduction', value="For any major problems, please seek out the server staff. For any problems relating to the functioning of the bot, alert the creator of the problem and wait for a fix. The help menu consists of all commands relating to the server. Some of these commands may only be ran by a user with the appropriate rank. To see the commands, please check below.", inline=False)
-    embed.add_field(name='Moderation Commands ───────────────────────────────────', value="Use these to moderate the server", inline=False)
+    embed.add_field(name='Moderation Commands ──────────────────────────────────────', value="Use these to moderate the server", inline=False)
     embed.add_field(name='Ban User', value="!ban | Bans a user from the server, indefinitely.", inline=False)
     embed.add_field(name='Kick User', value="!kick | Kicks a user from the server.", inline=False)
     embed.add_field(name='Clear Messages', value="!clear (Number) | Clears a number of messages from the server.", inline=False)
@@ -73,7 +73,7 @@ async def clear(ctx, amount=5):
     async for message in bot.logs_from(channel, limit=int(amount)):
         messages.append(message)
     await bot.delete_messages(messages)
-    await bot.say('Messages Deleted.')
+    await bot.say('Messages Deleted')
 
 @bot.command(pass_context=True)
 @commands.has_role("Admin")
