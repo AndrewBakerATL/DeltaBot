@@ -5,12 +5,15 @@ import asyncio
 import chalk
 from itertools import cycle
 import youtube_dl
+import json
+import os
 
 Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
 
 #Prefix
 
 bot = commands.Bot(command_prefix='!')
+os.chdir(r'./')
 
 players = {}
 queues = {}
@@ -192,6 +195,44 @@ async def on_member_join(member):
     role = discord.utils.get(member.server.roles, name='Admin')
     await bot.add_roles(member, role)
 
+    with open('members.json', 'r') as f:
+        members = json.load(f)
+
+    await update_data(members, member)
+
+    with open ('members.json', 'w') as f:
+        json.dump(members, f)
+
+
+async def on_message(message):
+    with open('members.json', 'r') as f:
+        members = json.load(f)
+
+    await update_data(members, message.author)
+    await add_experience(members, message.author, 10)
+    await level_up(members, message.author, message.channel)
+
+    with open ('members.json', 'w') as f:
+        json.dump(members, f)
+
+
+async def update_data(members, user):
+    if not user.id in members:
+        members[user.id] = {}
+        members[user.id]['experience'] = 0
+        members[user.id]['level'] = 1
+
+async def add_experience(members, user, exp):
+    members[user.id]['experience'] += exp
+
+async def level_up(members, user, channel):
+    experience = members[user.id]['experience']
+    lvl_start = members[user.id]['level']
+    lvl_end = int(experience ** (1/4))
+
+    if lvl_start < lvl_end:
+        await client.send_message(channel, '{} has leveled up to level {}'.format(user.mention, lvl_end))
+        members[user.id]['level'] = lvl_end
 #Tasks
 
 bot.loop.create_task(change_status())
