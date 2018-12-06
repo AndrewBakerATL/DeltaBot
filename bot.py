@@ -13,6 +13,7 @@ Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
 bot = commands.Bot(command_prefix='!')
 
 players = {}
+queues = {}
 
 status = ['Managing The Server', 'Scanning Server Logs', 'Compiling Anomalies']
 bot.remove_command('help')
@@ -27,6 +28,12 @@ async def change_status():
         await asyncio.sleep(30)
 
 #On Ready Status
+
+def check_queue(id):
+    if queues[id] != []:
+        player = queues[id].pop(0)
+        players[id] = player
+        player.start()
 
 @bot.event
 async def on_ready():
@@ -146,7 +153,7 @@ async def leave(ctx):
 async def play(ctx, url):
     server = ctx.message.server
     voice_client = bot.voice_client_in(server)
-    player = await voice_client.create_ytdl_player(url)
+    player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
     players[server.id] = player
     player.start()
 
@@ -164,7 +171,20 @@ async def stop(ctx):
 async def resume(ctx):
     id = ctx.message.server.id
     players[id].resume()
-    
+
+@bot.command(pass_context=True)
+async def queue(ctx, url):
+    server = ctx.message.server
+    voice_client = bot.voice_client_in(server)
+    player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+
+    if server.id in queues:
+        queues[server.id].append(player)
+    else:
+        queues[server.id] = [player]
+    await bot.say("**Added To Queue**")
+
+
 #Events
 
 @bot.event
