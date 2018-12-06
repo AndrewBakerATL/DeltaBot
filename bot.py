@@ -6,7 +6,7 @@ import chalk
 from itertools import cycle
 import youtube_dl
 
-Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
+Token = "Token"
 
 #Prefix
 
