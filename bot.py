@@ -4,12 +4,16 @@ from discord.ext.commands import Bot
 import asyncio
 import chalk
 from itertools import cycle
+import youtube_dl
 
 Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
 
 #Prefix
 
 bot = commands.Bot(command_prefix='!')
+
+players = {}
+
 status = ['Managing The Server', 'Scanning Server Logs', 'Compiling Anomalies']
 bot.remove_command('help')
 
@@ -21,7 +25,6 @@ async def change_status():
         current_status = next(msgs)
         await bot.change_presence(game=discord.Game(name=current_status))
         await asyncio.sleep(30)
-
 
 #On Ready Status
 
@@ -49,8 +52,6 @@ async def help(ctx):
     embed.add_field(name='Server Information', value="!serverinfo | Shows information about the active server.", inline=False)
     embed.add_field(name='Miscellaneous Commands ──────────────────────────────────────', value="Added on commands.", inline=False)
     embed.add_field(name='Echo Command', value="!echo (text) | The bot echoes the text given to it.", inline=False)
-
-
     await bot.send_message(author, embed=embed)
 
 @bot.command(pass_context=True)
@@ -130,6 +131,25 @@ async def serverinfo(ctx):
     embed.set_footer(text="Testing Bot Data Report")
     await bot.say(embed=embed)
 
+@bot.command(pass_context=True)
+async def join(ctx):
+    channel = ctx.message.author.voice.voice_channel
+    await bot.join_voice_channel(channel)
+
+@bot.command(pass_context=True)
+async def leave(ctx):
+    server = ctx.message.server
+    voice_client = bot.voice_client_in(server)
+    await voice_client.disconnect()
+
+@bot.command(pass_context=True)
+async def play(ctx, url):
+    server = ctx.message.server
+    voice_client = bot.voice_client_in(server)
+    player = await voice_client.create_ytdl_player(url)
+    players[server.id] = player
+    player.start()
+
 #Events
 
 @bot.event
@@ -137,7 +157,10 @@ async def on_member_join(member):
     role = discord.utils.get(member.server.roles, name='Admin')
     await bot.add_roles(member, role)
 
+#Tasks
+
 bot.loop.create_task(change_status())
 
 #Tokens
+
 bot.run(Token)
