@@ -1,4 +1,7 @@
-# Discord.py Bot
+![Delta](https://cdn.discordapp.com/avatars/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png)
+
+
+# Delta Bot
 A Simple Discord Bot running on the discord.py API.
 
 ## The Why
