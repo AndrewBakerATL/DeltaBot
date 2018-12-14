@@ -13,5 +13,5 @@ Welcome Commands, Autorole, Moderation Commands, Information Commands, User Expe
 ### Additionally
 The API itself seems to work pretty well. Another reason is to test the long-term sustainability of the platform / extension.
 
-### Add To Discord | [->](https://discordapp.com/oauth2/authorize?client_id=481923206848970803&scope=bot&permissions=8/)
+### Add To Discord | [>](https://discordapp.com/oauth2/authorize?client_id=481923206848970803&scope=bot&permissions=8/)
 
