@@ -5,10 +5,8 @@ import asyncio
 import chalk
 from itertools import cycle
 import youtube_dl
-#import json
-#import os
-
-Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
+import json
+import os
 
 #Prefix
 
@@ -42,6 +40,7 @@ async def on_ready():
     print ("Bot Online")
     print ("Bot Name: " + bot.user.name)
     print ("Bot ID: " + bot.user.id)
+    print ("Bot running under user: {}".format(bot.user))
     #await bot.change_presence(game=discord.Game(name='Managing The Server'))
 
 #Commands
@@ -49,8 +48,8 @@ async def on_ready():
 @bot.command(pass_context=True)
 async def help(ctx):
     author = ctx.message.author
-    embed = discord.Embed(color = 0xffffff)
-    embed.set_author(name='Requesting Help Report', icon_url="https://willjackward.files.wordpress.com/2013/02/screen-shot-2013-02-11-at-10-40-04.png")
+    embed = discord.Embed(color = 0xfc4156)
+    embed.set_author(name='Requesting Help Report', icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
     embed.add_field(name='Introduction', value="For any major problems, please seek out the server staff. For any problems relating to the functioning of the bot, alert the creator of the problem and wait for a fix. The help menu consists of all commands relating to the server. Some of these commands may only be ran by a user with the appropriate rank. To see the commands, please check below.", inline=False)
     embed.add_field(name='Moderation Commands ──────────────────────────────────────', value="Use these to moderate the server", inline=False)
     embed.add_field(name='Ban User', value="!ban | Bans a user from the server, indefinitely.", inline=False)
@@ -88,9 +87,9 @@ async def clear(ctx, amount=5):
 @bot.command(pass_context=True)
 @commands.has_role("Admin")
 async def kick(ctx, user: discord.Member):
-    embed = discord.Embed(title="Kicking User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xffffff)
-    embed.set_footer(text="Testing Bot Discipline Report")
-    embed.set_author(name="Discipline Report", icon_url="https://willjackward.files.wordpress.com/2013/02/screen-shot-2013-02-11-at-10-40-04.png")
+    embed = discord.Embed(title="Kicking User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xfc4156)
+    embed.set_footer(text="Delta Discipline Report")
+    embed.set_author(name="Discipline Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
     embed.add_field(name="User Name", value="`Name:` | {}".format(user.name), inline=True)
     embed.add_field(name="User ID", value="`ID:` | {}".format(user.id), inline=True)
     embed.add_field(name="User Role", value="`Highest:` | {} ".format(user.top_role), inline=True)
@@ -103,9 +102,9 @@ async def kick(ctx, user: discord.Member):
 @bot.command(pass_context=True)
 @commands.has_role("Admin")
 async def ban(ctx, user: discord.Member):
-    embed = discord.Embed(title="Banning User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xffffff)
-    embed.set_footer(text="Testing Bot Discipline Report")
-    embed.set_author(name="Discipline Report", icon_url="https://willjackward.files.wordpress.com/2013/02/screen-shot-2013-02-11-at-10-40-04.png")
+    embed = discord.Embed(title="Banning User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xfc4156)
+    embed.set_footer(text="Delta Discipline Report")
+    embed.set_author(name="Discipline Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
     embed.add_field(name="User Name", value="`Name:` | {}".format(user.name), inline=True)
     embed.add_field(name="User ID", value="`ID:` | {}".format(user.id), inline=True)
     embed.add_field(name="User Role", value="`Highest:` | {} ".format(user.top_role), inline=True)
@@ -117,9 +116,9 @@ async def ban(ctx, user: discord.Member):
 
 @bot.command(pass_context=True)
 async def identify(ctx, user: discord.Member):
-    embed = discord.Embed(title="{}'s Info".format(user.name), description="Pulling ` {}`'s  File From Database".format(user.name), color=0xffffff)
-    embed.set_footer(text="Testing Bot Data Report")
-    embed.set_author(name="Database File", icon_url="https://willjackward.files.wordpress.com/2013/02/screen-shot-2013-02-11-at-10-40-04.png")
+    embed = discord.Embed(title="{}'s Info".format(user.name), description="Pulling ` {}`'s  File From Database".format(user.name), color=0xfc4156)
+    embed.set_footer(text="Delta Data Report")
+    embed.set_author(name="Database File", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
     embed.add_field(name="User Name", value="`Name:` | {}".format(user.name), inline=True)
     embed.add_field(name="User ID", value="`ID:` | {}".format(user.id), inline=True)
     embed.add_field(name="User Status", value="`Status:` | {}".format(user.status), inline=True)
@@ -130,14 +129,14 @@ async def identify(ctx, user: discord.Member):
 
 @bot.command(pass_context=True)
 async def serverinfo(ctx):
-    embed = discord.Embed(title="{}'s Information".format(ctx.message.server.name), description="Polling known information. | Subject: `{}`".format(ctx.message.server.name), color=0xffffff)
-    embed.set_author(name="Location File", icon_url="https://willjackward.files.wordpress.com/2013/02/screen-shot-2013-02-11-at-10-40-04.png")
+    embed = discord.Embed(title="{}'s Information".format(ctx.message.server.name), description="Polling known information. | Subject: `{}`".format(ctx.message.server.name), color=0xfc4156)
+    embed.set_author(name="Location File", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
     embed.add_field(name="Server Name", value="`Name:` | {}".format(ctx.message.server.name))
     embed.add_field(name="Server ID", value="`ID:` | {}".format(ctx.message.server.id), inline=True)
     embed.add_field(name="Server Roles", value=len(ctx.message.server.roles), inline=True)
     embed.add_field(name="Server Members", value=len(ctx.message.server.members))
     embed.set_thumbnail(url=ctx.message.server.icon_url)
-    embed.set_footer(text="Testing Bot Data Report")
+    embed.set_footer(text="Delta Data Report")
     await bot.say(embed=embed)
 
 @bot.command(pass_context=True)
@@ -152,13 +151,13 @@ async def leave(ctx):
     await voice_client.disconnect()
 
 @bot.command(pass_context=True)
-async def play(ctx, url):
+async def play(ctx, *, url):
     server = ctx.message.server
     voice_client = bot.voice_client_in(server)
-    player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+    player = await voice_client.create_ytdl_player(f"ytsearch:{url}", after=lambda: check_queue(server.id))
     players[server.id] = player
     player.start()
-    await bot.say("**Playing Song**")
+    await bot.say("**Playing Song** -> `` {} ``".format(url))
 
 @bot.command(pass_context=True)
 async def pause(ctx):
@@ -179,24 +178,38 @@ async def resume(ctx):
     await bot.say("**Resuming Playback**")
 
 @bot.command(pass_context=True)
-async def queue(ctx, url):
+async def queue(ctx, *, url):
     server = ctx.message.server
     voice_client = bot.voice_client_in(server)
-    player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+    player = await voice_client.create_ytdl_player(f"ytsearch:{url}", after=lambda: check_queue(server.id))
 
     if server.id in queues:
         queues[server.id].append(player)
     else:
         queues[server.id] = [player]
-    await bot.say("**Added To Queue**")
+    await bot.say("**Added To Queue** -> `` {} ``".format(url))
 
+@bot.command(pass_context=True)
+async def skip(ctx):
+    server = ctx.message.server
+    voice_client = bot.voice_client_in(server)
+    id = ctx.message.server.id
+
+    if server.id in queues:
+        players[id].stop()
+        await bot.say("**Skipping Song**")
+    else:
+        await bot.say("**Queue is Empty**")
 
 #Events
 
 @bot.event
 async def on_member_join(member):
-    role = discord.utils.get(member.server.roles, name='Admin')
+    channel = discord.utils.get(member.server.channels, name='welcome')
+    role = discord.utils.get(member.server.roles, name='Newcomer')
     await bot.add_roles(member, role)
+    await bot.send_message(channel, "**Welcome To The Server** | *{}*".format(member))
+    await bot.send_message(channel, "Welcome to the server, {}. We hope you enjoy your stay. Staff is located to your right if you have any problems. Be aware that the server uses a #terms-&-conditions and take notice of it. If you have any problems, let us know.".format(member.mention))
 
 #Tasks
 
@@ -204,4 +217,5 @@ bot.loop.create_task(change_status())
 
 #Tokens
 
+Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
 bot.run(Token)
