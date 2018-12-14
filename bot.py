@@ -220,18 +220,26 @@ async def on_member_join(member):
 @bot.event
 async def on_message_delete(message):
     channel = discord.utils.get(message.server.channels, name='server-logs')
-    embed = discord.Embed(title='Deleted Message', colour=discord.Colour.dark_grey())
+    embed = discord.Embed(title='**Deleted Message**', description='Pulling Deleted Message', color=0xfc4156)
     author = message.author
     content = message.content
-    embed.add_field(name=author, value=content, inline=False)
+    embed.add_field(name="**Name**", value=author, inline=False)
+    embed.add_field(name="**Message**", value=content, inline=False)
+    embed.set_author(name="Data Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.set_thumbnail(url=message.author.avatar_url)
+    embed.set_footer(text="Delta Data Report")
     await bot.send_message(channel, embed=embed)
 
 @bot.event
 async def on_message_edit(before, after):
     channel = discord.utils.get(before.server.channels, name='server-logs')
-    embed = discord.Embed(title='Message Edited', description='Pulling Edited Message', color=discord.Colour.dark_grey())
-    embed.add_field(name=before.author, value=before.content, inline=False)
-    embed.add_field(name=after.author, value=after.content, inline=False)
+    embed = discord.Embed(title='**Message Edited**', description='Pulling Edited Message', color=0xfc4156)
+    embed.set_author(name="Data Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.add_field(name="**Name**", value=before.author, inline=False)
+    embed.add_field(name="``Before:``", value=before.content, inline=False)
+    embed.add_field(name="``After:``", value=after.content, inline=False)
+    embed.set_footer(text="Delta Data Report")
+    embed.set_thumbnail(url=before.author.avatar_url)
     await bot.send_message(channel, embed=embed)
 
 #Tasks
