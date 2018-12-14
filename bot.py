@@ -85,6 +85,12 @@ async def clear(ctx, amount=5):
     await bot.say('Messages Deleted')
 
 @bot.command(pass_context=True)
+async def purge(ctx, amount=5):
+    channel = ctx.message.channel
+    deleted = await bot.purge_from(channel, limit=int(amount))
+    await bot.send_message(channel, 'Deleted {} message(s)'.format(len(deleted)))
+
+@bot.command(pass_context=True)
 @commands.has_role("Admin")
 async def kick(ctx, user: discord.Member):
     embed = discord.Embed(title="Kicking User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xfc4156)
@@ -209,7 +215,7 @@ async def on_member_join(member):
     role = discord.utils.get(member.server.roles, name='Newcomer')
     await bot.add_roles(member, role)
     await bot.send_message(channel, "**Welcome To The Server** | *{}*".format(member))
-    await bot.send_message(channel, "Welcome to the server, {}. We hope you enjoy your stay. Staff is located to your right if you have any problems. Be aware that the server uses a #terms-&-conditions and take notice of it. If you have any problems, let us know.".format(member.mention))
+    await bot.send_message(channel, "Welcome to the server, {}. We hope you enjoy your stay. Staff is located to your right if you have any problems. Be aware that the server uses a #terms-conditions and take notice of it. If you have any problems, let us know.".format(member.mention))
 
 @bot.event
 async def on_message_delete(message):
@@ -218,6 +224,14 @@ async def on_message_delete(message):
     author = message.author
     content = message.content
     embed.add_field(name=author, value=content, inline=False)
+    await bot.send_message(channel, embed=embed)
+
+@bot.event
+async def on_message_edit(before, after):
+    channel = discord.utils.get(before.server.channels, name='server-logs')
+    embed = discord.Embed(title='Message Edited', description='Pulling Edited Message', color=discord.Colour.dark_grey())
+    embed.add_field(name=before.author, value=before.content, inline=False)
+    embed.add_field(name=after.author, value=after.content, inline=False)
     await bot.send_message(channel, embed=embed)
 
 #Tasks
