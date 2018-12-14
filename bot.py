@@ -93,6 +93,8 @@ async def purge(ctx, amount=5):
 @bot.command(pass_context=True)
 @commands.has_role("Admin")
 async def kick(ctx, user: discord.Member):
+    server_log = discord.utils.get(user.server.channels, name='server-logs')
+    channel = ctx.message.channel
     embed = discord.Embed(title="Kicking User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xfc4156)
     embed.set_footer(text="Delta Discipline Report")
     embed.set_author(name="Discipline Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
@@ -102,12 +104,15 @@ async def kick(ctx, user: discord.Member):
     embed.add_field(name="Date Joined", value="`Joined:` | {}".format(user.joined_at), inline=True)
     embed.add_field(name="Action Taken", value="`Discipline:` | **Kicked {} **".format(user.name), inline=True)
     embed.set_thumbnail(url=user.avatar_url)
-    await bot.say(embed=embed)
+    await bot.send_message(channel, embed=embed)
+    await bot.send_message(server_log, embed=embed)
     await bot.kick(user)
 
 @bot.command(pass_context=True)
 @commands.has_role("Admin")
 async def ban(ctx, user: discord.Member):
+    server_log = discord.utils.get(user.server.channels, name='server-logs')
+    channel = ctx.message.channel
     embed = discord.Embed(title="Banning User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xfc4156)
     embed.set_footer(text="Delta Discipline Report")
     embed.set_author(name="Discipline Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
@@ -117,8 +122,27 @@ async def ban(ctx, user: discord.Member):
     embed.add_field(name="Date Joined", value="`Joined:` | {}".format(user.joined_at), inline=True)
     embed.add_field(name="Action Taken", value="`Discipline:` | **Banned {} **".format(user.name), inline=True)
     embed.set_thumbnail(url=user.avatar_url)
-    await bot.say(embed=embed)
+    await bot.send_message(channel, embed=embed)
+    await bot.send_message(server_log, embed=embed)
     await bot.ban(user)
+
+@bot.command(pass_context=True)
+@commands.has_role("Admin")
+async def hammer(ctx, user: discord.Member):
+    server_log = discord.utils.get(user.server.channels, name='server-logs')
+    channel = ctx.message.channel
+    embed = discord.Embed(title="Banning User", description="Taking action on `{}`'s  File From `{} Database`".format(user.name, ctx.message.server.name), color=0xfc4156)
+    embed.set_footer(text="Delta Discipline Report")
+    embed.set_author(name="Discipline Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.add_field(name="User Name", value="`Name:` | {}".format(user.name), inline=True)
+    embed.add_field(name="User ID", value="`ID:` | {}".format(user.id), inline=True)
+    embed.add_field(name="User Role", value="`Highest:` | {} ".format(user.top_role), inline=True)
+    embed.add_field(name="Date Joined", value="`Joined:` | {}".format(user.joined_at), inline=True)
+    embed.add_field(name="Action Taken", value="`Discipline:` | **Banned {} **".format(user.name), inline=True)
+    await bot.send_message(channel, embed=embed)
+    await bot.send_message(server_log, embed=embed)
+    await bot.ban(user, delete_message_days=7)
+
 
 @bot.command(pass_context=True)
 async def identify(ctx, user: discord.Member):
@@ -217,6 +241,31 @@ async def on_member_join(member):
     await bot.send_message(channel, "**Welcome To The Server** | *{}*".format(member))
     await bot.send_message(channel, "Welcome to the server, {}. We hope you enjoy your stay. Staff is located to your right if you have any problems. Be aware that the server uses a #terms-conditions and take notice of it. If you have any problems, let us know.".format(member.mention))
 
+    channel = discord.utils.get(member.server.channels, name='server-logs')
+    embed = discord.Embed(title='**User Joined**', description='Detected User Join', color=0xfc4156)
+    embed.add_field(name="**Name**", value=member, inline=False)
+    embed.add_field(name="**Message**", value="User joined the server", inline=False)
+    embed.add_field(name="**Date Joined**", value="`Joined:` | {}".format(member.joined_at), inline=True)
+    embed.set_author(name="Data Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.set_thumbnail(url=member.avatar_url)
+    embed.set_footer(text="Delta Data Report")
+    await bot.send_message(channel, embed=embed)
+
+@bot.event
+async def on_member_remove(member):
+    channel = discord.utils.get(member.server.channels, name='welcome')
+    await bot.send_message(channel, "**Left The Server** | *{}*".format(member))
+    await bot.send_message(channel, "Goodbye, {}. Seeing as you left the server, for whichever reason, we're sorry to see you go. Looking towards the future, we'll keep an eye out for you..".format(member.mention))
+
+    channel = discord.utils.get(member.server.channels, name='server-logs')
+    embed = discord.Embed(title='**User Left**', description='Detected User Leave', color=0xfc4156)
+    embed.add_field(name="**Name**", value=member.mention, inline=False)
+    embed.add_field(name="**Message**", value="User has left the server", inline=False)
+    embed.set_author(name="Data Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.set_thumbnail(url=member.avatar_url)
+    embed.set_footer(text="Delta Data Report")
+    await bot.send_message(channel, embed=embed)
+
 @bot.event
 async def on_message_delete(message):
     channel = discord.utils.get(message.server.channels, name='server-logs')
@@ -240,6 +289,42 @@ async def on_message_edit(before, after):
     embed.add_field(name="``After:``", value=after.content, inline=False)
     embed.set_footer(text="Delta Data Report")
     embed.set_thumbnail(url=before.author.avatar_url)
+    await bot.send_message(channel, embed=embed)
+
+@bot.event
+async def on_member_update(before, after):
+    channel = discord.utils.get(before.server.channels, name='server-logs')
+    embed = discord.Embed(title='**Status Change**', description="Users' Status Changed", color=0xfc4156)
+    embed.set_author(name="Status Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.add_field(name="**Name**", value=before.mention, inline=False)
+    embed.add_field(name="``Before Status:``", value=before.status, inline=True)
+    embed.add_field(name="``After Status:``", value=after.status, inline=True)
+    embed.add_field(name="``Before Game:``", value=before.game, inline=True)
+    embed.add_field(name="``After Game:``", value=after.game, inline=True)
+    embed.add_field(name="``Before Name:``", value=before.nick, inline=True)
+    embed.add_field(name="``After Name:``", value=after.nick, inline=True)
+    embed.add_field(name="``Before Role:``", value=before.top_role, inline=True)
+    embed.add_field(name="``After Role:``", value=after.top_role, inline=True)
+    embed.set_footer(text="Delta Data Report")
+    embed.set_thumbnail(url=before.avatar_url)
+    await bot.send_message(channel, embed=embed)
+
+@bot.event
+async def on_member_ban(member):
+    server = message.server
+    channel = discord.utils.get(member.server.channels, name='server-logs')
+    embed = discord.Embed(title='**User Banned**', description="Users' Ban Changed", color=0xfc4156)
+    embed.set_author(name="Ban Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.add_field(name="**User Banned**", value=member.mention, inline=False)
+    await bot.send_message(channel, embed=embed)
+
+@bot.event
+async def on_member_unban(server, user):
+    server = message.server
+    channel = discord.utils.get(server.channels, name='server-logs')
+    embed = discord.Embed(title='**User Unbanned**', description="Users' Ban Changed", color=0xfc4156)
+    embed.set_author(name="Ban Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+    embed.add_field(name="**Action**", value="User was unbanned, {}".format(user), inline=False)
     await bot.send_message(channel, embed=embed)
 
 #Tasks
