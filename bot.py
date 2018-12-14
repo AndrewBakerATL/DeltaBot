@@ -211,6 +211,15 @@ async def on_member_join(member):
     await bot.send_message(channel, "**Welcome To The Server** | *{}*".format(member))
     await bot.send_message(channel, "Welcome to the server, {}. We hope you enjoy your stay. Staff is located to your right if you have any problems. Be aware that the server uses a #terms-&-conditions and take notice of it. If you have any problems, let us know.".format(member.mention))
 
+@bot.event
+async def on_message_delete(message):
+    channel = discord.utils.get(message.server.channels, name='server-logs')
+    embed = discord.Embed(title='Deleted Message', colour=discord.Colour.dark_grey())
+    author = message.author
+    content = message.content
+    embed.add_field(name=author, value=content, inline=False)
+    await bot.send_message(channel, embed=embed)
+
 #Tasks
 
 bot.loop.create_task(change_status())
