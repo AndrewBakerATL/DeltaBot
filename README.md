@@ -24,6 +24,8 @@ Essentially, Delta Bot handles everything from base server setup to advanced log
 * Leveling System
 * Experience System
 ##### Release
+* Reaction Images
+* Reaction GIFS
 * Refinement & Bug Fixing
 
 
