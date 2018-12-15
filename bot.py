@@ -69,7 +69,7 @@ async def start(ctx):
     await bot.create_channel(server, 'server-logs', type=discord.ChannelType.text)
     await bot.send_message(channel, "**Creating Logging Channel |** *Done*")
     await bot.send_message(channel, "**Creating Terms Channel |** *Loading...*")
-    await bot.send_message(channel, "Creating the terms channel and placing at the top of the list. This is the dedicated channel for your server rules and / or conditions Any terms of use, or terms and conditions should be placed here. This name can be changed, but it isn't recommended.")
+    await bot.send_message(channel, "Creating the terms channel and placing at the top of the list. This is the dedicated channel for your server rules and / or conditions Any terms of use, or terms and conditions should be placed here. This name can be changed, but it will break record keeping.")
     await bot.create_channel(server, 'terms-conditions', type=discord.ChannelType.text)
     await bot.send_message(channel, "**Creating Terms Channel |** *Done*")
     await bot.send_message(channel, "**Creating Newbie Role |** *Loading...*")
@@ -87,12 +87,19 @@ async def accept(ctx):
     channel = ctx.message.channel
     server = ctx.message.server
     member = ctx.message.author
+    role = discord.utils.get(ctx.message.server.roles, name='Member')
     await bot.send_message(channel, "**Terms & Conditions |** *Accepted*")
     await bot.send_message(channel, "User, {}, has accepted the {}'s Terms & Conditons, as per the chat channel. They are now being allowed into the server and given the role of ``Member``.'".format(member.mention, server))
     await bot.send_message(channel, "**Verifying Role |** *Verifying & Adding*")
     await bot.send_message(channel, "Verifying that the user has the role. If user does not hold the role, granting them the role.")
-    await bot.add_roles(member=member, roles=('Member'))
+    await bot.add_roles(member, role)
     await bot.send_message(channel, "**Verification Complete |** *Role Granted*")
+    terms = discord.utils.get(ctx.message.server.channels, name='terms-conditions')
+    await bot.send_message(terms, "**Terms & Conditions |** *Accepted*")
+    await bot.send_message(terms, "User, {}, has accepted the {}'s Terms & Conditons, as per the chat channel. They are now being allowed into the server and given the role of ``Member``.'".format(member.mention, server))
+    await bot.send_message(terms, "**Verifying Role |** *Verifying & Adding*")
+    await bot.send_message(terms, "Verifying that the user has the role. If user does not hold the role, granting them the role.")
+    await bot.send_message(terms, "**Verification Complete |** *Role Granted*")
 
 @bot.command(pass_context=True)
 async def help(ctx):
