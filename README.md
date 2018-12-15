@@ -8,6 +8,7 @@ A Universal Bot with a built-in installer
 Essentially, Delta Bot handles everything from base server setup to advanced logging functions. It can track every user event through discord, take note ov every user's action and change, give moderation commands, stream music from keywords (no link needed), manage music queues, seamless transition to the next songs, handle server Terms & Conditions compliance with it's users, and setup most of this by running the packaged installer in the help menu, even for basic server addition (no need for self-hosting).
 
 ### Planned Features
+##### Alpha
 * Moderation Commands
 * Automated Installer
 * Advanced Logging
@@ -18,7 +19,13 @@ Essentially, Delta Bot handles everything from base server setup to advanced log
 * Leaving Messages
 * Compliance(T&C) Notices
 * Cycled Status Changes
-* And More...
+##### Beta
+* Above Features
+* Leveling System
+* Experience System
+##### Release
+* Refinement & Bug Fixing
+
 
 ### Release Schedule
 I have no idea when, or if, this will ever have a full release. At the moment, these are most likely what I think the steps will be, and what they'll include:
