@@ -37,4 +37,4 @@ I have no idea when, or if, this will ever have a full release. At the moment, t
 | **Relase**     | Advanced Function and Bug Free | Self-Hosted & Cloud Hosted |
 
 ### Add To Discord | [>](https://discordapp.com/oauth2/authorize?client_id=481923206848970803&scope=bot&permissions=8/)
-The Link to actually add the Cloud-Hosted version to your Discord Server
+The link to actually add the Cloud-Hosted version to your Discord Server
