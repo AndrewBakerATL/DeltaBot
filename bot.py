@@ -172,5 +172,5 @@ bot.loop.create_task(change_status())
 
 # Tokens
 
-Token = "Token"
+Token = "NDgxOTIzMjA2ODQ4OTcwODAz.DrpPng.oKeZXc2hieFe4R7_ETK9Q_tewu0"
 bot.run(Token)
