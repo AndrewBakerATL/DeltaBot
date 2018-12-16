@@ -10,6 +10,7 @@ Essentially, Delta Bot handles everything from base server setup to advanced log
 ### Planned Features
 ##### Alpha
 * Moderation Commands
+* Advanced Music Playback
 * Automated Installer
 * Advanced Logging
 * User Verification
