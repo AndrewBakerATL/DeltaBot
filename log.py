@@ -68,20 +68,51 @@ class Log:
 
     async def on_member_update(self, before, after):
         channel = discord.utils.get(before.server.channels, name='server-logs')
-        embed = discord.Embed(title='**Status Change**', description="Users' Status Changed", color=0xfc4156)
-        embed.set_author(name="Status Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
-        embed.add_field(name="**Name**", value=before.mention, inline=False)
-        embed.add_field(name="``Before Status:``", value=before.status, inline=True)
-        embed.add_field(name="``After Status:``", value=after.status, inline=True)
-        embed.add_field(name="``Before Game:``", value=before.game, inline=True)
-        embed.add_field(name="``After Game:``", value=after.game, inline=True)
-        embed.add_field(name="``Before Name:``", value=before.nick, inline=True)
-        embed.add_field(name="``After Name:``", value=after.nick, inline=True)
-        embed.add_field(name="``Before Role:``", value=before.top_role, inline=True)
-        embed.add_field(name="``After Role:``", value=after.top_role, inline=True)
-        embed.set_footer(text="Delta Data Report")
-        embed.set_thumbnail(url=before.avatar_url)
-        await self.bot.send_message(channel, embed=embed)
+        if before.status != after.status:
+            user = before.mention
+            embed = discord.Embed(title='**Status Change** | :eyes: ', description="{}'s status changed".format(user), color=0xfc4156)
+            embed.add_field(name="**Changed To**", value="Member's status changed from **{}** to **{}**".format(before.status, after.status))
+            embed.set_thumbnail(url=before.avatar_url)
+            embed.set_author(name="Logging Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+            embed.set_footer(text="Delta Data Report")
+            await self.bot.send_message(channel, embed=embed)
+        if before.game != after.game:
+            user = before.mention
+            embed = discord.Embed(title='**Game Changed** | :joystick: ', description="{}'s playing a new game".format(user), color=0xfc4156)
+            embed.add_field(name="**Changed To**", value="Member's game changed from **{}** to **{}**".format(before.game, after.game))
+            embed.set_thumbnail(url=before.avatar_url)
+            embed.set_author(name="Logging Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+            embed.set_footer(text="Delta Data Report")
+            await self.bot.send_message(channel, embed=embed)
+        if before.nick != after.nick:
+            user = before.mention
+            embed = discord.Embed(title='**Name Changed** | :pencil: ', description="{}'s name changed".format(user), color=0xfc4156)
+            embed.add_field(name="**Username**", value=before.name)
+            embed.add_field(name="**Changed To**", value="Member's name changed from **{}** to **{}**".format(before.nick, after.nick))
+            embed.set_thumbnail(url=before.avatar_url)
+            embed.set_author(name="Logging Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+            embed.set_footer(text="Delta Data Report")
+            await self.bot.send_message(channel, embed=embed)
+        if before.top_role != after.top_role:
+            user = before.mention
+            embed = discord.Embed(title='**Role Changed** | :briefcase: ', description="{}'s role changed".format(user), color=0xfc4156)
+            embed.add_field(name="**Username**", value=before.name)
+            embed.add_field(name="**Changed To**", value="Member's role changed from **{}** to **{}**".format(before.top_role, after.top_role))
+            embed.add_field(name="**Held Roles**", value="{}".format(after.roles))
+            embed.set_thumbnail(url=before.avatar_url)
+            embed.set_author(name="Logging Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+            embed.set_footer(text="Delta Data Report")
+            await self.bot.send_message(channel, embed=embed)
+        if before.avatar_url != after.avatar_url:
+            user = before.mention
+            embed = discord.Embed(title='**Avatar Changed** | :eyes: ', description="{}'s changed their avatar".format(user), color=0xfc4156)
+            embed.add_field(name="**Username**", value=before.name)
+            embed.set_thumbnail(url=before.avatar_url)
+            embed.set_author(name="Logging Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+            embed.set_footer(text="Delta Data Report")
+            await self.bot.send_message(channel, embed=embed)
+            embed.set_thumbnail(url=after.avatar_url)
+            await self.bot.send_message(channel, embed=embed)
 
     async def on_member_ban(self, member):
         server = message.server
