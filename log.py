@@ -45,12 +45,11 @@ class Log:
 
     async def on_message_delete(self, message):
         channel = discord.utils.get(message.server.channels, name='server-logs')
-        embed = discord.Embed(title='**Deleted Message**', description='Pulling Deleted Message', color=0xfc4156)
-        author = message.author
+        author = message.author.mention
         content = message.content
-        embed.add_field(name="**Name**", value=author, inline=False)
+        embed = discord.Embed(title='**Recovering Message** | :link:', description="Pulling {}'s Deleted Message".format(author), color=0xfc4156)
         embed.add_field(name="**Message**", value=content, inline=False)
-        embed.set_author(name="Data Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
+        embed.set_author(name="Deleted Message", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
         embed.set_thumbnail(url=message.author.avatar_url)
         embed.set_footer(text="Delta Data Report")
         await self.bot.send_message(channel, embed=embed)

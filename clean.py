@@ -24,7 +24,7 @@ class Verification:
     @commands.command(pass_context=True)
     async def purge(self, ctx, amount=5):
         channel = ctx.message.channel
-        deleted = await self.bot.purge_from(channel, limit=int(amount))
+        deleted = await self.bot.purge_from(channel, limit=int(amount), check=None, before=None, after=None)
         await self.bot.send_message(channel, 'Deleted {} message(s)'.format(len(deleted)))
 
 def setup(bot):

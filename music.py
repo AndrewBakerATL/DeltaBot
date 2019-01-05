@@ -38,7 +38,14 @@ class Music:
         voice_client = self.bot.voice_client_in(server)
         player = await voice_client.create_ytdl_player(f"ytsearch:{url}", after=lambda: check_queue(server.id))
         players[server.id] = player
-        player.start()
+        channel = ctx.message.author.voice.voice_channel
+
+        if self.bot in channel:
+            player.start()
+        else:
+            await self.bot.join_voice_channel(channel)
+            player.start()
+
         await self.bot.say("**Playing Song** -> `` {} ``".format(url))
 
     @commands.command(pass_context=True)
@@ -69,6 +76,7 @@ class Music:
             queues[server.id].append(player)
         else:
             queues[server.id] = [player]
+
         await self.bot.say("**Added To Queue** -> `` {} ``".format(url))
 
     @commands.command(pass_context=True)
@@ -85,9 +93,12 @@ class Music:
     async def queued(self, ctx):
         server = ctx.message.server
         id = ctx.message.server.id
+        channel = ctx.message.channel
         if server.id in queues:
-            for server.id in queues:
-                await self.bot.say([server.id])
+            embed = discord.Embed(title='**Song Queue** | :musical_note: ', description="{}'s Song Queue".format(server.name), color=0xfc4156)
+            embed.add_field(name="**Queued Songs**", value=queues.values())
+            embed.set_thumbnail(url=server.icon_url)
+            await self.bot.send_message(channel, embed=embed)
         else:
             await self.bot.say("**Queue is Empty**")
 
