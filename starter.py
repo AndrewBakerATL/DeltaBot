@@ -23,6 +23,26 @@ class Starter:
         await self.bot.send_message(channel, "If you understand this and want to continue, run the command, ``start``.")
 
     @commands.command(pass_context=True)
+    async def terms(self, ctx):
+        channel = ctx.message.channel
+        server = ctx.message.server
+        member = ctx.message.author
+        await self.bot.send_message(channel, "**Terms & Condtitions** | Accepting the Terms")
+        await self.bot.send_message(channel, "Whether agreed upon or not, this server is moderated by **Delta Bot**. Because of this, the server uses a specific set of Terms & Conditions, or rules, and it's required to agree upon these rules to gain full access to the server. Should you have read the Terms and Conditions made available to you already in the applicable channel, please use the command `accept` to join the server.")
+
+    #@commands.command(pass_context=True)
+    #async def accept(self, ctx):
+#        channel = ctx.message.channel
+#        server = ctx.message.server
+#        member = ctx.message.author
+#        role = discord.utils.get(ctx.server.roles, name='M')
+#        await self.bot.send_message("**Terms & Conditions** | *Accepted*")
+#        await self.bot.send_message("Granting access to the server and applying applicable roles. This process may take a minute...")
+#        await self.bot.send_message("**Status** | *Loading Roles...*")
+#        await self.bot.add_roles(member, role)
+#        await self.bot.send_message("**Status** | *Role Granted, Process Complete*")
+
+    @commands.command(pass_context=True)
     async def start(self, ctx):
         channel = ctx.message.channel
         server = ctx.message.server

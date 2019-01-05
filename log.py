@@ -55,13 +55,13 @@ class Log:
         embed.set_footer(text="Delta Data Report")
         await self.bot.send_message(channel, embed=embed)
 
-    async def on_message_edit(before, after):
+    async def on_message_edit(self, before, after):
         channel = discord.utils.get(before.server.channels, name='server-logs')
-        embed = discord.Embed(title='**Message Edited**', description='Pulling Edited Message', color=0xfc4156)
+        author = before.author.mention
+        embed = discord.Embed(title='**Message Edited** | :pencil:', description="Pulling {}'s Edited Message".format(author), color=0xfc4156)
         embed.set_author(name="Data Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
-        embed.add_field(name="**Name**", value=before.author, inline=False)
-        embed.add_field(name="``Before:``", value=before.content, inline=False)
-        embed.add_field(name="``After:``", value=after.content, inline=False)
+        embed.add_field(name="**Before:**", value=before.content, inline=False)
+        embed.add_field(name="**After:**", value=after.content, inline=False)
         embed.set_footer(text="Delta Data Report")
         embed.set_thumbnail(url=before.author.avatar_url)
         await self.bot.send_message(channel, embed=embed)
@@ -94,11 +94,12 @@ class Log:
             embed.set_footer(text="Delta Data Report")
             await self.bot.send_message(channel, embed=embed)
         if before.top_role != after.top_role:
+            roles = after.roles
             user = before.mention
             embed = discord.Embed(title='**Role Changed** | :briefcase: ', description="{}'s role changed".format(user), color=0xfc4156)
             embed.add_field(name="**Username**", value=before.name)
             embed.add_field(name="**Changed To**", value="Member's role changed from **{}** to **{}**".format(before.top_role, after.top_role))
-            embed.add_field(name="**Held Roles**", value="{}".format(after.roles))
+            embed.add_field(name="**Held Roles**", value=", ".join([role.name for role in roles]))
             embed.set_thumbnail(url=before.avatar_url)
             embed.set_author(name="Logging Change", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
             embed.set_footer(text="Delta Data Report")

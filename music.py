@@ -9,12 +9,11 @@ import json
 import os
 
 players = {}
-queues = []
+queues = {}
 
 class Music:
-
     def __init__(self, bot):
-        self.bot = bots
+        self.bot = bot
 
     def check_queue(id):
         if queues[id] != []:
@@ -83,12 +82,12 @@ class Music:
             await self.bot.say("**Queue is Empty**")
 
     @commands.command(pass_context=True)
-    async def queued(self. ctx):
+    async def queued(self, ctx):
         server = ctx.message.server
         id = ctx.message.server.id
         if server.id in queues:
             for server.id in queues:
-                await self.bot.say(server.id)
+                await self.bot.say([server.id])
         else:
             await self.bot.say("**Queue is Empty**")
 
