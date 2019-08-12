@@ -8,9 +8,37 @@ import youtube_dl
 import json
 import os
 
+
 class Moderation:
     def __init__(self, bot):
         self.bot = bot
+
+
+    @commands.command(pass_context=True)
+    @commands.has_role("Admin")
+    async def mute(self, ctx, user: discord.Member):
+        role = discord.utils.get(user.server.roles, name='Muted')
+        channel = ctx.message.channel
+        if role in user.roles:
+            embed = discord.Embed(title="**Muting User** | :mute:", description="{} is already muted.".format(user.mention), color=0xfc4156)
+            await self.bot.send_message(channel, embed=embed)
+        else:
+            await self.bot.add_roles(user, role)
+            embed = discord.Embed(title="**Muting User** | :mute:", description="Muting {}.".format(user.mention), color=0xfc4156)
+            await self.bot.send_message(channel, embed=embed)
+
+    @commands.command(pass_context=True)
+    @commands.has_role("Admin")
+    async def unmute(self, ctx, user: discord.Member):
+        role = discord.utils.get(user.server.roles, name='Muted')
+        channel = ctx.message.channel
+        if role in user.roles:
+            await self.bot.remove_roles(user, role)
+            embed = discord.Embed(title="**Unmuting User** | :sound:", description="Unmuting {}.".format(user.mention), color=0xfc4156)
+            await self.bot.send_message(channel, embed=embed)
+        else:
+            embed = discord.Embed(title="**Unmuting User** | :sound:", description="{} isn't muted.".format(user.mention), color=0xfc4156)
+            await self.bot.send_message(channel, embed=embed)
 
     @commands.command(pass_context=True)
     @commands.has_role("Admin")
@@ -18,7 +46,7 @@ class Moderation:
         server_log = discord.utils.get(user.server.channels, name='server-logs')
         channel = ctx.message.channel
         author = ctx.message.author
-        embed = discord.Embed(title="**Kicking User**", description="Taking action on {}'s  File From **{} Database**".format(author.mention, ctx.message.server.name), color=0xfc4156)
+        embed = discord.Embed(title="**Kicking User**", description="Taking action on {}'s  File From **{} Database**".format(user.mention, ctx.message.server.name), color=0xfc4156)
         embed.set_footer(text="Delta Discipline Report")
         embed.set_author(name="Discipline Report", icon_url="https://cdn.discordapp.com/app-icons/481923206848970803/394817ba790d2fbb9c36715a7ec00576.png")
         embed.add_field(name="__**User Name**__", value="**Name:** | {}".format(user.name), inline=True)

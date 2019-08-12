@@ -35,18 +35,19 @@ class Music:
     @commands.command(pass_context=True)
     async def play(self, ctx, *, url):
         server = ctx.message.server
+        channel = ctx.message.channel
         voice_client = self.bot.voice_client_in(server)
         player = await voice_client.create_ytdl_player(f"ytsearch:{url}", after=lambda: check_queue(server.id))
-        players[server.id] = player
-        channel = ctx.message.author.voice.voice_channel
 
-        if self.bot in channel:
-            player.start()
-        else:
+        if not ctx.message.server.me.voice.voice_channel:
+            channel = ctx.message.author.voice.voice_channel
             await self.bot.join_voice_channel(channel)
-            player.start()
-
-        await self.bot.say("**Playing Song** -> `` {} ``".format(url))
+        players[server.id] = player
+        player.start()
+        embed = discord.Embed(title='**Playing Song** | :musical_note: ', description="Playing `` {} `` in {}".format(url, server.name), color=0xfc4156)
+        embed.add_field(name='**Current Song**', value='Playing {}'.format(players[server.id].title))
+        embed.set_thumbnail(url=server.icon_url)
+        await self.bot.send_message(channel, embed=embed)
 
     @commands.command(pass_context=True)
     async def pause(self, ctx):
@@ -83,11 +84,12 @@ class Music:
     async def skip(self, ctx):
         server = ctx.message.server
         id = ctx.message.server.id
-        if server.id in queues:
-            players[id].stop()
-            await self.bot.say("**Skipping Song**")
-        else:
-            await self.bot.say("**Queue is Empty**")
+        channel = ctx.message.channel
+        if queues[id] != []:
+            player = queues[id].pop(0)
+            players[id] = player
+            player.start()
+        await self.bot.send_message(channel, "**Skipping Song**")
 
     @commands.command(pass_context=True)
     async def queued(self, ctx):
@@ -96,11 +98,20 @@ class Music:
         channel = ctx.message.channel
         if server.id in queues:
             embed = discord.Embed(title='**Song Queue** | :musical_note: ', description="{}'s Song Queue".format(server.name), color=0xfc4156)
-            embed.add_field(name="**Queued Songs**", value=queues.values())
+            embed.add_field(name="**Queued Songs**", value=", ".join(player.title for player in queues[server.id]))
             embed.set_thumbnail(url=server.icon_url)
             await self.bot.send_message(channel, embed=embed)
         else:
             await self.bot.say("**Queue is Empty**")
+
+    @commands.command(pass_context=True)
+    async def playing(self, ctx):
+        server = ctx.message.server
+        id = ctx.message.server.id
+        channel = ctx.message.channel
+        embed = discord.Embed(title='**Now Playing** | :musical_note:', description="Playing {}".format(players[server.id].title), color=0xfc4156)
+        embed.set_image(url='http://i.imgur.com/jYoUMTe.jpg')
+        await self.bot.send_message(channel, embed=embed)
 
 def setup(bot):
     bot.add_cog(Music(bot))

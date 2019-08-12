@@ -11,7 +11,7 @@ import os
 # Prefix
 
 bot = commands.Bot(command_prefix='!')
-extensions = ['moderation', 'starter', 'verify', 'clean', 'log', 'music']
+extensions = ['moderation', 'starter', 'verify', 'clean', 'log', 'music', 'leveling', 'error_handling']
 bot.remove_command('help')
 
 if __name__ == '__main__':
@@ -26,7 +26,7 @@ queues = {}
 
 # Status Cycle
 
-status = ['Managing The Server', 'Scanning Server Logs', 'Compiling Anomalies', 'error_handling']
+status = ['Managing The Server', 'Scanning Server Logs', 'Compiling Anomalies']
 
 async def change_status():
     await bot.wait_until_ready()
@@ -102,70 +102,6 @@ async def help(ctx):
     embed.add_field(name='Ping Command', value="!ping | It replies back with pong.", inline=False)
     await bot.send_message(author, embed=embed)
 
-# Music Commands
-
-#@bot.command(pass_context=True)
-#async def join(ctx):
-#    channel = ctx.message.author.voice.voice_channel
-#    await bot.join_voice_channel(channel)
-#
-#@bot.command(pass_context=True)
-#async def leave(ctx):
-#    server = ctx.message.server
-#    voice_client = bot.voice_client_in(server)
-#    await voice_client.disconnect()
-#
-#@bot.command(pass_context=True)
-#async def play(ctx, *, url):
-#    server = ctx.message.server
-#    voice_client = bot.voice_client_in(server)
-#    player = await voice_client.create_ytdl_player(f"ytsearch:{url}", after=lambda: check_queue(server.id))
-#    players[server.id] = player
-#    player.start()
-#    await bot.say("**Playing Song** -> `` {} ``".format(url))
-#
-#@bot.command(pass_context=True)
-#async def pause(ctx):
-#    id = ctx.message.server.id
-#    players[id].pause()
-#    await bot.say("**Pausing Playback**")
-#
-#@bot.command(pass_context=True)
-#async def stop(ctx):
-#    id = ctx.message.server.id
-#    players[id].stop()
-#    await bot.say("**Stopping Playback**")
-#
-#@bot.command(pass_context=True)
-#async def resume(ctx):
-#    id = ctx.message.server.id
-#    players[id].resume()
-#    await bot.say("**Resuming Playback**")
-#
-#@bot.command(pass_context=True)
-#async def queue(ctx, *, url):
-#    server = ctx.message.server
-#    voice_client = bot.voice_client_in(server)
-#    player = await voice_client.create_ytdl_player(f"ytsearch:{url}", after=lambda: check_queue(server.id))
-#
-#    if server.id in queues:
-#        queues[server.id].append(player)
-#    else:
-#        queues[server.id] = [player]
-#    await bot.say("**Added To Queue** -> `` {} ``".format(url))
-#
-#@bot.command(pass_context=True)
-#async def skip(ctx):
-#    server = ctx.message.server
-#    voice_client = bot.voice_client_in(server)
-#    id = ctx.message.server.id
-#
-#    if server.id in queues:
-#        players[id].stop()
-#        await bot.say("**Skipping Song**")
-#    else:
-#        await bot.say("**Queue is Empty**")
-#
 # Tasks
 
 bot.loop.create_task(change_status())

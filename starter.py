@@ -71,40 +71,61 @@ class Starter:
 
     @commands.command(pass_context=True)
     async def advstart(self, ctx):
+        #Objects
         channel = ctx.message.channel
         server = ctx.message.server
         muted = await self.bot.create_role(server, name='Muted', hoist=True, mentionable=True)
         permissions = discord.Permissions(permissions=1115136)
         color = discord.Colour(0x0d0909)
+        #Starter Channels
+        #Welcome Channel
         await self.bot.send_message(channel, "**Creating Welcome Channel |** *Loading...*")
         await self.bot.send_message(channel, "Creating the welcome channel and placing at the top of the list. This should be the channel set to the server welcome channel in your server settings. Do not change this name.")
         await self.bot.create_channel(server, 'welcome', type=discord.ChannelType.text)
         await self.bot.send_message(channel, "**Creating Welcome Channel |** *Done*")
+        #Logging Channel
         await self.bot.send_message(channel, "**Creating Logging Channel |** *Loading...*")
         await self.bot.send_message(channel, "Creating the logging channel and placing at the top of the list. This is the channel that all the logs and server events will report to. This is your source of information on events. Do not change this name.")
         await self.bot.create_channel(server, 'server-logs', type=discord.ChannelType.text)
         await self.bot.send_message(channel, "**Creating Logging Channel |** *Done*")
+        #Terms Channel
         await self.bot.send_message(channel, "**Creating Terms Channel |** *Loading...*")
         await self.bot.send_message(channel, "Creating the terms channel and placing at the top of the list. This is the dedicated channel for your server rules and / or conditions Any terms of use, or terms and conditions should be placed here. This name can be changed, but it will break record keeping.")
         await self.bot.create_channel(server, 'terms-conditions', type=discord.ChannelType.text)
         await self.bot.send_message(channel, "**Creating Terms Channel |** *Done*")
+        #creating Roles
+        #Newcomer Role
         await self.bot.send_message(channel, "**Creating Newbie Role |** *Loading...*")
         await self.bot.send_message(channel, "Creating the role for new members. This is going to be named, 'Newcomer'. Other mechnics rely on this. Do not change this name.")
         await self.bot.create_role(server, name='Newcomer', hoist=True, mentionable=True)
         await self.bot.send_message(channel, "**Creating Newbie Role |** *Done*")
+        #Member Role
         await self.bot.send_message(channel, "**Creating Member Role |** *Loading...*")
         await self.bot.send_message(channel, "Creating the role for server members. This is going to be named, 'Member'. This will signify agreement with the terms and conditions. Other mechanics rely on this. Do not change this name.")
         await self.bot.create_role(server, name='Member', hoist=True, mentionable=True)
         await self.bot.send_message(channel, "**Creating Member Role |** *Done*")
+        #Creating the Mute Command
+        role = discord.utils.get(ctx.message.server.roles, name='Muted')
         await self.bot.send_message(channel, "**Creating Mute Command |** *Loading...*")
         await self.bot.send_message(channel, "Creating the role for muted members. This is going to be named, 'Muted'. This will remove access to message, or talk, in all applicable channels. Other mechanics rely on this. Do not change this name.")
-        await self.bot.edit_role(server, role=muted, name='Muted', permissions=permissions, color=color)
-        role = discord.utils.get(ctx.message.server.roles, name='Muted')
-        top = discord.Role(position=0)
-        await self.bot.move_role(server, role=role, position=top)
+        await self.bot.edit_role(server, role=muted, name='Muted', permissions=permissions, color=color, hoist=True, mentionable=True)
         await self.bot.send_message(channel, "**Creating Mute Command |** *Done*")
         await self.bot.send_message(channel, "**Setup Complete |** *Delta Bot*")
         await self.bot.send_message(channel, "Your setup is complete. You should find the channels to your left, the roles in your server settings, and the welcome channel allocation in your server settings. Feel free to adjust permissions how you see fit and set the welcome channel.")
+
+
+        #Creating Level Roles
+        await self.bot.create_role(server, name='Level 0', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 5', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 10', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 15', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 20', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 25', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 30', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 35', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 40', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 45', hoist=True, mentionable=True)
+        await self.bot.create_role(server, name='Level 50', hoist=True, mentionable=True)
 
 def setup(bot):
     bot.add_cog(Starter(bot))
